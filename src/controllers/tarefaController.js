@@ -20,5 +20,15 @@ async function criar(req, res) {
   res.status(201).json(novaTarefa);
 }
 
+async function deletar(req, res) {
+  const apagou = await tarefaService.deletarTarefa(req.params.id);
+  if (!apagou) {
+    res.status(404).json({ erro: "Tarefa nao encontrada" });
+    return;
+  }
+  res.status(204).send();
+}
+
+
 
 module.exports = {listar};

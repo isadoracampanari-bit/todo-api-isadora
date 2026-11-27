@@ -9,4 +9,7 @@ const router = express.Router();
 router.get("/", tarefaController.listar);
 router.get("/:id", validarId, tarefaController.buscarPorId);
 router.post("/", tarefaController.criar);
+router.put("/:id", validarId, tarefaController.atualizar);
+router.patch("/:id", validarId, tarefaController.atualizarParcial);
+router.delete("/:id", validarId, tarefaController.deeletar);
 module.exports = router;
