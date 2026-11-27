@@ -9,12 +9,20 @@ const STATUS = ["a_fazer", "fazendo", "feita"];
 async function listarTarefas(filtros) {
   const [linhas] = await db.query("SELECT * FROM tarefas");
   let resultado = linhas;
+
+  if (filtros.status) {
+    resultado = resultado.filter((tarefa) => tarefa.status === filtros.status);
+  }
+  if (filtros.prioridade) {
+    resultado = resultado.filter(
+      (tarefa) => tarefa.prioridade === filtros.prioridade,
+    );
+  }
+
   return resultado;
 }
 async function buscarTarefaPorId(id) {
-  const [linhas] = await db.query("SELECT * FROM tarefas WHERE id = ?", [
-    id,
-  ]);
+  const [linhas] = await db.query("SELECT * FROM tarefas WHERE id = ?", [id]);
   return linhas[0];
 }
 
@@ -26,8 +34,8 @@ async function criarTarefa(dados) {
   return await buscarTarefaPorId(resultado.insertId);
 }
 
-async function atualizarTarefa(id, dados){
-    const [resultado] = await db.query(
+async function atualizarTarefa(id, dados) {
+  const [resultado] = await db.query(
     "UPDATE tarefas SET titulo = ?, prioridade = ?, status = ? WHERE id = ?",
     [dados.titulo, dados.prioridade, dados.status, id],
   );
@@ -66,13 +74,12 @@ function validarTarefa(dados, completo) {
   return null;
 }
 
-
 module.exports = {
-    listarTarefas,
-    buscarTarefaPorId,
-    criarTarefa,
-    atualizarTarefa,
-    atualizarParcialTarefa,
-    deletarTarefa,
-    validarTarefa,
+  listarTarefas,
+  buscarTarefaPorId,
+  criarTarefa,
+  atualizarTarefa,
+  atualizarParcialTarefa,
+  deletarTarefa,
+  validarTarefa,
 };
